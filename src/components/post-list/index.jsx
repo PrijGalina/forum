@@ -3,6 +3,10 @@ import { PostItem } from '../post-item';
 
 
 export const PostList = ({posts, title, remove}) => {
+  if (!posts.length) {
+    return <h1 style={{textAlign: 'center'}}>Posts not found</h1>
+  }
+  
   return (
     <>
       <h1 style={{textAlign: 'center'}}>{title}</h1>
