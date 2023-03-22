@@ -8,6 +8,7 @@ import { Button } from "./components/ui/button";
 import {usePosts} from './hooks/usePosts';
 import PostService from "./api/PostService";
 import { Loader } from "./components/ui/loader";
+import { useFetching } from "./hooks/useFetching";
 
 
 function App() {
@@ -16,17 +17,10 @@ function App() {
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-  const [isPostsLoading, setIsPostsLoading] = useState(false);
-
-  async function fetchPosts() {
-    setIsPostsLoading(true);
-    setTimeout(async () => {
-
-      const posts = await PostService.getAll();
-      setPosts(posts);
-      setIsPostsLoading(false);
-    }, 2000)
-  }
+  const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
+    const posts = await PostService.getAll();
+    setPosts(posts);
+  });
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -51,6 +45,9 @@ function App() {
       </Modal>
       <hr style={{margin: '15px 0'}}/>
       <PostFilter filter={filter} setFilter={setFilter}/>
+      {postsError && 
+        <h3 style={{margin: '25px 0'}}>An error has occurred: {postsError}</h3>
+      }
       {
         isPostsLoading 
         ? <Loader/>
