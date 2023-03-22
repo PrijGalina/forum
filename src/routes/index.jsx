@@ -6,12 +6,20 @@ import { Post } from "../pages/post";
 import { NotFound } from "../pages/404";
 
 export const AppRouter = () => {
+  const routes = [
+    {path: '/about', component: <About/>, exact: false },
+    {path: '/posts', component: <Posts/>, exact: true},
+    {path: '/posts/:id', component: <Post/>, exact: true},
+    {path: '*', component: <NotFound/>, exact: false},
+  ];
+
   return (
     <Routes>
-      <Route path="/about" element={<About/>} />
-      <Route exact path="/posts" element={<Posts/>} />
-      <Route exact path="/posts/:id" element={<Post/>} />
-      <Route path='*' element={<NotFound />}/>
+      {
+        routes.map((route) => {
+          return <Route key={`route_${route.path}`} path={route.path} element={route.component} exact={route.exact} />
+        })
+      }
     </Routes>
   )
 }
