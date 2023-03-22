@@ -10,7 +10,7 @@ export const Select = ({options, defaultValue, value, onChange}) => {
     >
       <option value="" disabled>{defaultValue}</option>
       {
-        options.map(option => <option value={option.value} key={option.value}>{option.body}</option>)
+        options.map(option => <option value={option.value} key={option.value}>{option.name}</option>)
       }
     </select>
   )

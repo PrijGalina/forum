@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import PostService from "../../api/PostService";
 import {usePosts} from '../../hooks/usePosts';
 import { useFetching } from "../../hooks/useFetching";
+import { useObserver } from "../../hooks/useObserver";
 import { getPageCount } from "../../utils/pages";
 import { PostList } from "../../components/post-list";
 import { PostForm } from "../../components/post-form";
@@ -10,7 +11,7 @@ import { Modal } from '../../components/ui/modal';
 import { Button } from "../../components/ui/button";
 import { Loader } from "../../components/ui/loader";
 import { Pagination } from "../../components/ui/pagination";
-
+import { Select } from "../../components/ui/select";
 
 export const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -20,11 +21,12 @@ export const Posts = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+  const lastElement = useRef();
 
 
   const [fetchPosts, isPostsLoading, postsError] = useFetching(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount = response.headers['x-total-count'];
     setTotalPages(getPageCount(totalCount, limit));
   });
@@ -40,12 +42,15 @@ export const Posts = () => {
 
   const changePage = (page) => {
     setPage(page);
-    fetchPosts(limit, page);
   }
+
+  useObserver(lastElement, page < totalPages, isPostsLoading, () => {
+    setPage(page + 1);
+  });
 
   useEffect(() => {
     fetchPosts(limit, page);
-  }, [])
+  }, [page, limit])
 
   return (
     <div className="App">
@@ -57,14 +62,24 @@ export const Posts = () => {
       </Modal>
       <hr style={{margin: '15px 0'}}/>
       <PostFilter filter={filter} setFilter={setFilter}/>
+      <Select 
+        value={limit} 
+        onChange={(value) => setLimit(value)} 
+        defaultValue="Num of posts per page"
+        options={[
+          {value: 5, name: '5'},
+          {value: 10, name: '10'},
+          {value: 15, name: '15'},
+          {value: -1, name: 'all'},
+        ]}
+      />
       {postsError && 
         <h3 style={{margin: '25px 0'}}>An error has occurred: {postsError}</h3>
       }
-      {
-        isPostsLoading 
-        ? <Loader/>
-        : <PostList remove={removePost} posts={sortedAndSearchedPosts} title={"Post list"}/>
-      }
+      <PostList remove={removePost} posts={sortedAndSearchedPosts} title={"Post list"}/>
+      <div ref={lastElement} style={{height: '20px', backgroundColor: 'transparent'}} />
+      {isPostsLoading  && <Loader/>}
+    
       <Pagination 
         totalPages={totalPages} 
         currentPage={page} 
