@@ -11,6 +11,7 @@ export const Login = ({}) => {
   const login = (event) => {
     event.preventDefault();
     setIsAuth(true);
+    localStorage.setItem('auth', 'true');
     navigate('/posts');
   };
 
