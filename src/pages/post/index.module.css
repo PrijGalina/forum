@@ -1,0 +1,9 @@
+.container {
+  padding: 15px 5px 5px 5px;
+}
+
+.title {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 15px;
+}

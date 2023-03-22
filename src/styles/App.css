@@ -14,15 +14,7 @@
   width: 700px;
 }
 
-.post {
-  display: flex;
-  padding: 15px;
-  border: 1px solid teal;
-  margin-top: 15px;
-  justify-content: space-between;
-  align-items: center;
-}
-
+/* post transition begin*/
 .post-enter {
   opacity: 0;
 }
@@ -40,6 +32,7 @@
   opacity: 0;
   transition: opacity 500ms ease-in;
 }
+/* post transition end */
 
 .page__wrapper {
   margin: 25px 0;
