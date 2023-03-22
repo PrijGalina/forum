@@ -7,7 +7,7 @@ export const PostItem = ({post, remove, number}) => {
     <div className="post">
       <div className="post__content">
         <strong>{number}. {post.title}</strong>
-        <p>{post.description}</p>
+        <p>{post.body}</p>
       </div>
       <div className="post__btns">
         <Button onClick={() => remove(post)}>delete</Button>

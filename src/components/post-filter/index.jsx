@@ -19,11 +19,11 @@ export const PostFilter = ({filter, setFilter}) => {
         options={[
           {
             value: 'title',
-            description: 'by title'
+            body: 'by title'
           },
           {
-            value: 'description',
-            description: 'by description'
+            value: 'body',
+            body: 'by body'
           }
         ]}
       />
