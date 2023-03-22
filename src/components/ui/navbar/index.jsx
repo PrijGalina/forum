@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../../context'
+import { Button } from '../button'
 
 
 export const Navbar = () => {
+  const {isAuth, setIsAuth} = useContext(AuthContext);
+
   return (
     <div className="navbar">
+      {isAuth && <Button onClick={() => setIsAuth(false)}>Log out</Button>}
       <div className="navbar__links">
         <Link to="/about" className="navbar__link">About</Link>
         <Link to="/posts" className="navbar__link">Posts</Link>

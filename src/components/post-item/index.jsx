@@ -13,7 +13,7 @@ export const PostItem = ({post, remove, number}) => {
         <p>{post.body}</p>
       </div>
       <div className={cl.post__btns}>
-        <Button onClick={()=>navigate(`/posts/${post.id}`)}>open</Button>
+        <Button onClick={() => navigate(`/posts/${post.id}`)}>open</Button>
         <span style={{display: 'block', width: '5px'}}/>
         <Button onClick={() => remove(post)}>delete</Button>
       </div>
