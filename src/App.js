@@ -1,25 +1,34 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
+import PostService from "./api/PostService";
+import {usePosts} from './hooks/usePosts';
+import { useFetching } from "./hooks/useFetching";
+import { getPageCount } from "./utils/pages";
+import './styles/App.css';
 import { PostList } from "./components/post-list";
 import { PostForm } from "./components/post-form";
 import { PostFilter } from "./components/post-filter";
 import { Modal } from './components/ui/modal';
-import './styles/App.css'
 import { Button } from "./components/ui/button";
-import {usePosts} from './hooks/usePosts';
-import PostService from "./api/PostService";
 import { Loader } from "./components/ui/loader";
-import { useFetching } from "./hooks/useFetching";
+import { Pagination } from "./components/ui/pagination";
+
 
 
 function App() {
   const [posts, setPosts] = useState([]);
-
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-  const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+
+
+  const [fetchPosts, isPostsLoading, postsError] = useFetching(async (limit, page) => {
+    const response = await PostService.getAll(limit, page);
+    setPosts(response.data);
+    const totalCount = response.headers['x-total-count'];
+    setTotalPages(getPageCount(totalCount, limit));
   });
 
   const createPost = (newPost) => {
@@ -31,8 +40,13 @@ function App() {
     setPosts(posts.filter(p => p.id !== post.id));
   }
 
+  const changePage = (page) => {
+    setPage(page);
+    fetchPosts(limit, page);
+  }
+
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(limit, page);
   }, [])
 
   return (
@@ -53,6 +67,11 @@ function App() {
         ? <Loader/>
         : <PostList remove={removePost} posts={sortedAndSearchedPosts} title={"Post list"}/>
       }
+      <Pagination 
+        totalPages={totalPages} 
+        currentPage={page} 
+        changePage={changePage} 
+      />
     </div>
   );
 }

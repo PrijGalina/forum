@@ -40,3 +40,20 @@
   opacity: 0;
   transition: opacity 500ms ease-in;
 }
+
+.page__wrapper {
+  margin: 25px 0;
+  display: flex;
+}
+
+.page {
+  padding: 3px 8px;
+  border: 1px solid teal;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.page__current {
+  background-color: teal;
+  color: white;
+}

@@ -5,9 +5,7 @@ export const Loader = () => {
   
   return (
     <div className={cl.container}>
-      <div className={cl.loader}>
-
-      </div>
+      <div className={cl.loader}></div>
     </div>
 )
     
