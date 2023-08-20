@@ -1,0 +1,39 @@
+.navbar {
+  height: 100px;
+  width: 100%;
+  /* width: 100vw; */
+
+  padding: 29px 69px 23px 47px;
+  background-color: #2B3B37;
+}
+
+.navbar__container {
+  width: 700px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__links {
+  margin-left: auto;
+  display: flex;
+}
+
+.navbar__link {
+  color: white;
+  display: block;
+  margin-left: 15px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.navbar__links > button {
+  margin: 0;
+  margin-left: 15px;
+  height: auto;
+  min-width: auto;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0;
+}

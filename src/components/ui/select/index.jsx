@@ -7,6 +7,7 @@ export const Select = ({options, defaultValue, value, onChange}) => {
     <select
       value={value}
       onChange={ event => onChange(event.target.value)}
+      className={classes.mySelect}
     >
       <option value="" disabled>{defaultValue}</option>
       {

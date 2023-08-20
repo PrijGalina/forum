@@ -1,0 +1,8 @@
+.filter {
+  display: flex; 
+}
+
+.filter > input {
+  margin-right: 10px;
+}
+

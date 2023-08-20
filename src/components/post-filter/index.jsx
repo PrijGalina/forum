@@ -1,11 +1,12 @@
 import React from 'react'
 import { Select } from "../ui/select";
 import { Input } from "../ui/input";
+import classes from './post-filter.module.css';
 
 export const PostFilter = ({filter, setFilter}) => {
   
   return (
-    <div>
+    <div className={classes.filter}>
       <Input 
         value={filter.query}
         onChange={e => setFilter({...filter, query: e.target.value})}

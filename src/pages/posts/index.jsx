@@ -12,6 +12,7 @@ import { Button } from "../../components/ui/button";
 import { Loader } from "../../components/ui/loader";
 import { Pagination } from "../../components/ui/pagination";
 import { Select } from "../../components/ui/select";
+import classes from './posts.module.css';
 
 export const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -53,26 +54,29 @@ export const Posts = () => {
   }, [page, limit])
 
   return (
-    <div className="App">
-      <Button style={{marginTop: '30px'}} onClick={()=> setModal(true)} >
-        Create post
-      </Button>
-      <Modal visible={modal} setVisible={setModal}>
-        <PostForm create={createPost}/>
-      </Modal>
-      <hr style={{margin: '15px 0'}}/>
-      <PostFilter filter={filter} setFilter={setFilter}/>
-      <Select 
-        value={limit} 
-        onChange={(value) => setLimit(value)} 
-        defaultValue="Num of posts per page"
-        options={[
-          {value: 5, name: '5'},
-          {value: 10, name: '10'},
-          {value: 15, name: '15'},
-          {value: -1, name: 'all'},
-        ]}
-      />
+    <div className={classes.page}>
+      <div className={classes.filter}>
+        <Button onClick={()=> setModal(true)} >
+          Create post
+        </Button>
+        <Modal visible={modal} setVisible={setModal}>
+          <PostForm create={createPost}/>
+        </Modal>
+        {/* <hr style={{margin: '15px 0'}}/> */}
+        <PostFilter filter={filter} setFilter={setFilter}/>
+        <Select 
+          value={limit} 
+          onChange={(value) => setLimit(value)} 
+          defaultValue="Num of posts per page"
+          options={[
+            {value: 5, name: '5'},
+            {value: 10, name: '10'},
+            {value: 15, name: '15'},
+            {value: -1, name: 'all'},
+          ]}
+        />
+      </div>
+
       {postsError && 
         <h3 style={{margin: '25px 0'}}>An error has occurred: {postsError}</h3>
       }
