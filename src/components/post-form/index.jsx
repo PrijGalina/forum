@@ -4,7 +4,7 @@ import { Input } from '../ui/input';
 
 export const PostForm = ({create}) => {
   const [post, setPost] = useState({title: '', body: ''});  
-  
+
   const addNewPost = (e) => {
     e.preventDefault();
 
