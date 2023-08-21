@@ -3,6 +3,7 @@ import PostService from "../../api/PostService";
 import {usePosts} from '../../hooks/usePosts';
 import { useFetching } from "../../hooks/useFetching";
 import { useObserver } from "../../hooks/useObserver";
+import { useScroll } from "../../hooks/useScroll";
 import { getPageCount } from "../../utils/pages";
 import { PostList } from "../../components/post-list";
 import { PostForm } from "../../components/post-form";
@@ -22,14 +23,18 @@ export const Posts = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-  const lastElement = useRef();
-
+  const parentRef = useRef();
+  const childRef = useRef();
 
   const [fetchPosts, isPostsLoading, postsError] = useFetching(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
     setPosts([...posts, ...response.data]);
     const totalCount = response.headers['x-total-count'];
     setTotalPages(getPageCount(totalCount, limit));
+  });
+
+  const intersected = useScroll(parentRef, childRef, page < totalPages, isPostsLoading, () => {
+    setPage(page + 1);
   });
 
   const createPost = (newPost) => {
@@ -45,9 +50,9 @@ export const Posts = () => {
     setPage(page);
   }
 
-  useObserver(lastElement, page < totalPages, isPostsLoading, () => {
-    setPage(page + 1);
-  });
+  // useObserver(childRef, page < totalPages, isPostsLoading, () => {
+  //   setPage(page + 1);
+  // });
 
   useEffect(() => {
     fetchPosts(limit, page);
@@ -80,9 +85,12 @@ export const Posts = () => {
       {postsError && 
         <h3 style={{margin: '25px 0'}}>An error has occurred: {postsError}</h3>
       }
-      <PostList remove={removePost} posts={sortedAndSearchedPosts} title={"Post list"}/>
-      <div ref={lastElement} style={{height: '20px', backgroundColor: 'transparent'}} />
-      {isPostsLoading  && <Loader/>}
+
+      <div ref={parentRef}>
+        <PostList remove={removePost} posts={sortedAndSearchedPosts} title={"Post list"}/>
+        <div ref={childRef} style={{height: '20px', backgroundColor: 'transparent'}} />
+        {isPostsLoading  && <Loader/>}
+      </div>
     
       <Pagination 
         totalPages={totalPages} 
