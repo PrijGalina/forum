@@ -47,7 +47,7 @@ export const Posts = () => {
   }
 
   const changePage = (page) => {
-    setPage(page);
+      setPage(page);
   }
 
   // useObserver(childRef, page < totalPages, isPostsLoading, () => {
@@ -67,7 +67,6 @@ export const Posts = () => {
         <Modal visible={modal} setVisible={setModal}>
           <PostForm create={createPost}/>
         </Modal>
-        {/* <hr style={{margin: '15px 0'}}/> */}
         <PostFilter filter={filter} setFilter={setFilter}/>
         <Select 
           value={limit} 
@@ -92,11 +91,11 @@ export const Posts = () => {
         {isPostsLoading  && <Loader/>}
       </div>
     
-      <Pagination 
+      {/* <Pagination 
         totalPages={totalPages} 
         currentPage={page} 
         changePage={changePage} 
-      />
+      /> */}
     </div>
   );
 }
